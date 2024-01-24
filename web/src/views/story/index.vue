@@ -69,9 +69,8 @@ export default {
       previousPageFlag: true,
       chapterUrl: "",
       nextPageUrl: "",
-      previousPageUrl: "",
       pageList: [],
-      pageIndex: 0
+      pageIndex: 0,
     };
   },
   computed: {
@@ -108,7 +107,6 @@ export default {
         } else {
           this.nextPageFlag = false;
         }
-
       } catch (error) {
         console.error("Error fetching chapter content:", error);
       }
