@@ -66,6 +66,18 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/story',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Story',
+        component: () => import('@/views/story/index'),
+        meta: { title: '小说阅读', icon: 'table' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
