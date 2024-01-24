@@ -1,0 +1,50 @@
+version: "3"
+services:
+  sdam-web:
+    container_name: sdam-web
+    ports:
+      - "8088:8088"
+    build:
+      context: ./
+      dockerfile: ./docker_env/web/Dockerfile
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker_env/nginx/my.conf:/etc/nginx/conf.d/my.conf
+      - ./backend/static:/var/www/html
+    expose:
+      - "8088"
+    networks:
+      network:
+        ipv4_address: 178.8.0.19
+
+  sdam-flask:
+    build:
+      context: .
+      dockerfile: ./docker_env/flask/Dockerfile
+    container_name: sdam-flask
+    working_dir: /backend
+    environment:
+      TZ: Asia/Shanghai
+    privileged: true
+    volumes:
+      - ./backend:/backend
+      - ./logs/log:/var/log
+      - /opt/download:/opt
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+    restart: always
+    networks:
+      network:
+        ipv4_address: 178.8.0.18
+
+
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '178.8.0.0/16'
+
