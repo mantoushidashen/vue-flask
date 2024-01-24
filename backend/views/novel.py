@@ -17,7 +17,6 @@ class NovelChapters(Resource):
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
             list_element = soup.find(id='list')
-            print(list_element)
             if list_element:
                 chapters = list_element.find_all('a')
                 for chapter in chapters:
@@ -38,7 +37,8 @@ class NovelContent(Resource):
         response.encoding = 'utf-8'
         chapter_data = {
             'content': '',
-            'next_page': None
+            'next_page': None,
+            'url': chapter_url
         }
 
         if response.status_code == 200:
@@ -57,7 +57,6 @@ class NovelContent(Resource):
             
         else:
             return {'message': 'Failed to fetch chapter content'}, 500
-        
         return {"code": 20000, "data": chapter_data}
 
 api.add_resource(NovelChapters, '/api/novel/chapters')

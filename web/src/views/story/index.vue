@@ -24,17 +24,23 @@
           <el-button-group>
             <el-button
               type="primary"
-              icon="el-icon-arrow-left"
-              @click="previousChapter"
-              :disabled="chapterIndex === 0"
-              >上一章</el-button
+              @click="previousPageFlag ? previousPage() : previousChapter()"
+              :disabled="chapterIndex === 0 && !previousPageFlag"
             >
+              <template v-if="previousPageFlag"
+                >上一页<i class="el-icon-arrow-right el-icon--right"></i
+              ></template>
+              <template v-else
+                >上一章<i class="el-icon-arrow-right el-icon--right"></i
+              ></template>
+            </el-button>
+
             <el-button
               type="primary"
-              @click="Page ? nextPage() : nextChapter()" 
+              @click="nextPageFlag ? nextPage() : nextChapter()"
               :disabled="chapterIndex === chapters.length - 1"
             >
-              <template v-if="Page"
+              <template v-if="nextPageFlag"
                 >下一页<i class="el-icon-arrow-right el-icon--right"></i
               ></template>
               <template v-else
@@ -59,8 +65,13 @@ export default {
       chapterIndex: 0, // 当前章节索引
       currentChapterContent: [], // 当前章节内容
       title: "",
-      Page: false,
+      nextPageFlag: false,
+      previousPageFlag: true,
       chapterUrl: "",
+      nextPageUrl: "",
+      previousPageUrl: "",
+      pageList: [],
+      pageIndex: 0
     };
   },
   computed: {
@@ -74,10 +85,8 @@ export default {
         const response = await getNovelChapters();
         console.log(response);
         this.chapters = response.data;
-        console.log("Chapters");
-        console.log(this.chapters);
         // 在获取到章节列表后，加载第一章的内容
-        this.chapterUrl = this.chapters[0].url
+        this.chapterUrl = this.chapters[0].url;
         this.fetchChapterContent(this.chapterUrl);
       } catch (error) {
         console.error("Error fetching chapters:", error);
@@ -90,40 +99,52 @@ export default {
       try {
         this.title = this.chapters[this.chapterIndex].title;
         const response = await getNovelChapterContent(chapterUrl);
+        this.pageList.push(response.data.url);
         this.currentChapterContent = response.data.content.split("\n");
+
         if (response.data.next_page != null) {
-          console.log(response.data.next_page);
-          this.Page = true;
-          this.chapterUrl = response.data.next_page
+          this.nextPageFlag = true;
+          this.nextPageUrl = response.data.next_page;
+        } else {
+          this.nextPageFlag = false;
         }
-        else{
-            this.Page = false
-            this.chapterUrl = this.chapters[this.chapterIndex + 1].url
-        }
+
       } catch (error) {
         console.error("Error fetching chapter content:", error);
       }
     },
     nextPage() {
-        if (this.chapterIndex < this.totalChapters - 1) {
-        this.fetchChapterContent(this.chapterUrl);
+      if (this.chapterIndex <= this.totalChapters - 1) {
+        this.fetchChapterContent(this.nextPageUrl);
+        this.pageIndex += 1;
+        this.previousPageFlag = true;
       }
     },
     previousPage() {
-        if (this.chapterIndex > 0) {
-        this.fetchChapterContent(this.chapterUrl);
+      if (this.chapterIndex >= 0) {
+        this.pageIndex -= 1;
+        if (this.pageIndex == 0) {
+          this.previousPageFlag = false;
+        }
+        this.fetchChapterContent(this.pageList[this.pageIndex]);
       }
     },
     previousChapter() {
       if (this.chapterIndex > 0) {
+        this.pageIndex = 0;
+        this.previousPageFlag = false;
+        this.nextPageFlag = true;
         this.chapterIndex--;
-        this.fetchChapterContent(this.chapterUrl);
+        this.fetchChapterContent(this.chapters[this.chapterIndex].url);
       }
     },
     nextChapter() {
       if (this.chapterIndex < this.totalChapters - 1) {
+        this.pageIndex = 0;
         this.chapterIndex++;
-        this.fetchChapterContent(this.chapterUrl);
+        this.previousPageFlag = false;
+        this.nextPageFlag = true;
+        this.fetchChapterContent(this.chapters[this.chapterIndex].url);
       }
     },
   },
