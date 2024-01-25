@@ -12,7 +12,9 @@ export function getInfo(token) {
   return request({
     url: '/api/user/info',
     method: 'get',
-    params: { token }
+    headers: {
+      'Authorization': token
+    }
   })
 }
 

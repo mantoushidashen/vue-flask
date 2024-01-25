@@ -29,7 +29,7 @@ class NovelChapters(Resource):
                         })
             return {"code": 20000, "data": chapters_info}
         else:
-            return {'message': 'Failed to fetch chapters'}, 500
+            return {"code": 405,'message': 'Failed to fetch chapters'}, 500
 
 class NovelContent(Resource):
     def get(self, chapter_url):
@@ -56,7 +56,7 @@ class NovelContent(Resource):
                 chapter_data['next_page'] = base_url + next_page_url
             
         else:
-            return {'message': 'Failed to fetch chapter content'}, 500
+            return {"code": 405, 'message': 'Failed to fetch chapter content'}
         return {"code": 20000, "data": chapter_data}
 
 api.add_resource(NovelChapters, '/api/novel/chapters')

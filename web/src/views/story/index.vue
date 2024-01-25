@@ -166,9 +166,10 @@ export default {
   margin-bottom: 20px;
   padding: 30px; /* 内部间距 */
   font-family: "Times New Roman", Times, serif; /* 设置字体 */
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.6;
-  background-color: #f9f9f9; /* 轻微的背景颜色 */
+  background-color: #eceaea; /* 轻微的背景颜色 */
+  color: #020202;
 }
 
 .paragraph {
