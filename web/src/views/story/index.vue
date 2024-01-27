@@ -82,9 +82,7 @@ export default {
     async fetchChapters() {
       try {
         const response = await getNovelChapters();
-        console.log(response);
         this.chapters = response.data;
-        // 在获取到章节列表后，加载第一章的内容
         this.chapterUrl = this.chapters[0].url;
         this.fetchChapterContent(this.chapterUrl);
       } catch (error) {

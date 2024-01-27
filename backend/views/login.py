@@ -1,7 +1,7 @@
 
 from flask import Blueprint,request,g
 from flask_restful import reqparse, Resource, Api
-from common.config import admin_passwd, secret_key
+from common.config import secret_key
 from utils.token_auth import auth
 from authlib.jose import jwt
 from datetime import datetime, timedelta
