@@ -1,8 +1,9 @@
 from flask_httpauth import HTTPTokenAuth
-from config import secret_key
+from common.config import secret_key
 from flask import g, make_response, jsonify,request
 from authlib.jose import jwt, JoseError
 from authlib.jose.errors import ExpiredTokenError, BadSignatureError, DecodeError
+from model.User import User
 
 auth = HTTPTokenAuth()
 
@@ -19,7 +20,7 @@ def verify_token(token):
                     token = token.decode('utf-8')
                 token = token.replace("b'", "").replace("'", "")
         data = jwt.decode(token, secret_key)
-        print(data)
+        g.current_user = User.query.get(data['id'])
     except JoseError:
         g.token_error = True
         return False
