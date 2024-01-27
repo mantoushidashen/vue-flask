@@ -4,6 +4,7 @@ from flask import g, make_response, jsonify,request
 from authlib.jose import jwt, JoseError
 from authlib.jose.errors import ExpiredTokenError, BadSignatureError, DecodeError
 from model.User import User
+from common.response_code import ResponseCode
 
 auth = HTTPTokenAuth()
 
@@ -40,7 +41,19 @@ def verify_token(token):
 @auth.error_handler
 def unauthorized():
     if g.token_error:
-        return make_response(jsonify({'code':402,'error': 'Token Error'}), 402)
-
+        return ResponseCode.response(
+            success=False,
+            code=ResponseCode.TOKEN_ERROR,
+            message='Token Error'
+        )
     if g.token_timeout:
-        return make_response(jsonify({'code':401,'error': 'Token Expired'}), 401)
+        return ResponseCode.response(
+            success=False,
+            code=ResponseCode.TOKEN_EXPIRED,
+            message='Token Expired'
+        )
+    return ResponseCode.response(
+        success=False,
+        code=ResponseCode.UNAUTHORIZED,
+        message='Unauthorized'
+    )
