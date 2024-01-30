@@ -40,12 +40,11 @@ class NovelChapters(Resource):
         except Exception as e:
             return ResponseCode.response(False, ResponseCode.SERVER_ERROR, message=str(e))
 
-# NovelContent 资源类
 class NovelContent(Resource):
     def get(self, chapter_url):
         try:
             chapter = NovelChapterContent.query.filter_by(url=chapter_url).first()
-            if not chapter:  # 如果数据库中没有该章节内容
+            if not chapter: 
                 response = requests.get(chapter_url)
                 response.encoding = 'utf-8'
                 if response.status_code == 200:
@@ -65,7 +64,7 @@ class NovelContent(Resource):
                         new_chapter = NovelChapterContent(url=chapter_url, content=chapter_text, next_page=next_page_url)
                         db.session.add(new_chapter)
                         db.session.commit()
-                        chapter = new_chapter  # 使用新创建的章节对象
+                        chapter = new_chapter  
                     else:
                         return ResponseCode.response(False, ResponseCode.SERVER_ERROR, message="Chapter content not found")
                 else:
@@ -73,7 +72,7 @@ class NovelContent(Resource):
             
             chapter_data = {
                 'content': chapter.content,
-                'next_page': chapter.next_page,  # 使用数据库中的next_page字段
+                'next_page': chapter.next_page,  
                 'url': chapter_url
             }
             return ResponseCode.response(True, ResponseCode.SUCCESS, chapter_data)

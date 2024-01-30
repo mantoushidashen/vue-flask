@@ -74,7 +74,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Story',
         component: () => import('@/views/story/index'),
-        meta: { title: '小说阅读', icon: 'table' }
+        meta: { title: '小说阅读', icon: 'table' },
       }
     ]
   },
@@ -84,8 +84,17 @@ export const constantRoutes = [
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return {
+        x: 0,
+        y: 0
+      }
+    }
+  },
+  routes: constantRoutes,
 })
 
 const router = createRouter()
