@@ -274,7 +274,7 @@ export default {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.9);
+  background: inherit;
   padding: 10px;
   border-radius: 0 8px 8px 0;
   /* 添加最大宽度防止元素太宽 */

@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from flask import jsonify
+from common.singleton import SingletonABCMeta
 
-class ResponseCode:
+class ResponseCode(object, metaclass=SingletonABCMeta):
     SUCCESS = 20000
     UNAUTHORIZED = 40100
     TOKEN_ERROR = 40200
