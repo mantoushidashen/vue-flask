@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 from flask_httpauth import HTTPTokenAuth
 from common.config import secret_key
 from flask import g, make_response, jsonify,request

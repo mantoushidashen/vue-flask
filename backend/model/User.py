@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 from common.db_config import db  # 导入db
 
 class User(db.Model):

@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import common.db_config as db_config
 from common.db_config import db
 from flask import Flask, request

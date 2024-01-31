@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import os
 from flask import Blueprint, request, Response
 from flask_restful import reqparse, Resource, Api
